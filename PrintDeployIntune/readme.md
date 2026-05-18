@@ -134,7 +134,8 @@ If you use the repository root as the source, all files in the folder are includ
 3. Click **Create** and choose **Windows app (Win32)**.
 4. Upload the `.intunewin` file you created in the previous step.
 5. Add a clear name, description, and icon so the app looks good in Company Portal.
-<img width="496" height="595" alt="image" src="https://github.com/user-attachments/assets/7ed069c4-5524-4fe9-9cc4-5333d5412587" />
+<img width="1084" height="1209" alt="Uten navn" src="https://github.com/user-attachments/assets/a32507e5-b5b4-4486-a8f6-fe76688bf694" />
+
 
 Use the following commands:
 
