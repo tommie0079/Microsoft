@@ -146,7 +146,8 @@ powershell.exe -ExecutionPolicy Bypass -File "install.ps1"
 ```powershell
 powershell.exe -ExecutionPolicy Bypass -File "uninstall.ps1"
 ```
-<img width="456" height="381" alt="image" src="https://github.com/user-attachments/assets/f5b60946-ec5e-4aba-9c63-c4e4be319ba0" />
+<img width="1164" height="1198" alt="Uten navn" src="https://github.com/user-attachments/assets/ac7d3799-cdb4-4ee8-bd0d-839f130e7304" />
+
 
 For detection rules, use a custom detection script and upload `detection.ps1`.
 
