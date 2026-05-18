@@ -86,7 +86,43 @@ You can either do those steps manually, or run `Update-DriverConfig.ps1` to upda
 
 ## Package the App
 
-Package the application as an `.intunewin` file by using Microsoft Win32 Content Prep Tool.
+Package the application as an `.intunewin` file by using Microsoft Win32 Content Prep Tool (`IntuneWinAppUtil.exe`).
+
+1. Download `IntuneWinAppUtil.exe` from Microsoft.
+2. Create a staging folder that contains the files you want inside the package. For this project, the folder should contain at least:
+
+```text
+PackageSource\
+	install.ps1
+	uninstall.ps1
+	detection.ps1
+	UPD\
+```
+
+3. Copy the updated scripts and the full `UPD` folder into that staging folder.
+4. Run the packaging command:
+
+```powershell
+.\IntuneWinAppUtil.exe -c ".\PackageSource" -s "install.ps1" -o ".\Output"
+```
+
+Explanation:
+
+- `-c` is the source folder that will be packed.
+- `-s` is the setup file Intune runs during install. In this project that must be `install.ps1`.
+- `-o` is the folder where the generated `.intunewin` file will be saved.
+
+The tool will create an `.intunewin` file in the `Output` folder. Upload that file to Intune.
+
+Example if you package directly from this repository:
+
+```powershell
+.\IntuneWinAppUtil.exe -c "." -s "install.ps1" -o ".\Output"
+```
+
+That works because `install.ps1` and the `UPD` folder are already in the repository root.
+If you use the repository root as the source, all files in the folder are included in the package, not only `install.ps1`.
+
 
 ## Create the App in Intune
 
