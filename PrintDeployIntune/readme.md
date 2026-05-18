@@ -118,5 +118,6 @@ Choose whether the printer should be:
 - `Available` in Company Portal
 
 In this example, the printer is configured as **Available** for all users.
+
 <img width="495" height="405" alt="image" src="https://github.com/user-attachments/assets/3acf21a3-6d73-4cd2-838a-b63e910badf1" />
 
