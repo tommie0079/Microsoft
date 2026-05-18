@@ -15,6 +15,7 @@ This repository contains a simple workflow for packaging and deploying a network
 	```
 
 	Copy the entire `UPD` folder into this project.
+	You do not need to open `Install.exe` manually if the extracted driver files are already inside `UPD`.
 
 ## Project Structure
 
@@ -26,6 +27,41 @@ Create a packaging folder that contains:
 - `detection.ps1`
 
 Then adapt the PowerShell scripts to match your printer and environment.
+
+The current example in this repository is set up for the HP driver package already placed in `UPD`:
+
+- `DriverName = "HP Universal Printing PS"`
+- `INFFileName = "hpcu355z.inf"`
+
+Also update these values before packaging:
+
+- `PrinterName` in `install.ps1`, `uninstall.ps1`, and `detection.ps1`
+- `PrinterIP` in `install.ps1` and `uninstall.ps1`
+
+## How to change the driver next time
+
+If you replace the contents of `UPD` with another driver package, update `install.ps1` like this:
+
+1. Find the correct `.inf` file inside `UPD`.
+2. Open that `.inf` file in a text editor.
+3. Look near the top for the printer driver name, usually written inside quotes, for example:
+
+```text
+"HP Universal Printing PS" = ...
+```
+
+4. Set `INFFileName` in `install.ps1` to that `.inf` file name.
+5. Set `DriverName` in `install.ps1` to the quoted driver name from the `.inf` file.
+
+Example:
+
+```powershell
+$DriverName = "HP Universal Printing PS"
+$INFFileName = "hpcu355z.inf"
+```
+
+Keep `PrinterName` identical in all three scripts, or detection and uninstall will not match the installed printer.
+
 
 ## Package the App
 
