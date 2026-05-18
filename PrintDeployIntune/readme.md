@@ -87,8 +87,11 @@ You can either do those steps manually, or run `Update-DriverConfig.ps1` to upda
 ## Package the App
 
 Package the application as an `.intunewin` file by using Microsoft Win32 Content Prep Tool (`IntuneWinAppUtil.exe`).
+The recommended source is the official Microsoft GitHub repository:
+https://github.com/microsoft/Microsoft-Win32-Content-Prep-Tool
 
-1. Download `IntuneWinAppUtil.exe` from Microsoft.
+1. Download `IntuneWinAppUtil.exe` from the official Microsoft repository, preferably from the latest release:
+	https://github.com/microsoft/Microsoft-Win32-Content-Prep-Tool/releases
 2. Create a staging folder that contains the files you want inside the package. For this project, the folder should contain at least:
 
 ```text
