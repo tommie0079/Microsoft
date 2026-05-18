@@ -149,7 +149,7 @@ powershell.exe -ExecutionPolicy Bypass -File "uninstall.ps1"
 <img width="1164" height="1198" alt="Uten navn" src="https://github.com/user-attachments/assets/ac7d3799-cdb4-4ee8-bd0d-839f130e7304" />
 
 
-For detection rules, use a custom detection script and upload `detection.ps1`.
+For detection rules, use a custom detection script and upload `detection.ps1` and leave the default at No
 
 ## Assignments
 
