@@ -95,6 +95,7 @@ Package the application as an `.intunewin` file by using Microsoft Win32 Content
 3. Click **Create** and choose **Windows app (Win32)**.
 4. Upload the `.intunewin` file you created in the previous step.
 5. Add a clear name, description, and icon so the app looks good in Company Portal.
+<img width="496" height="595" alt="image" src="https://github.com/user-attachments/assets/7ed069c4-5524-4fe9-9cc4-5333d5412587" />
 
 Use the following commands:
 
@@ -105,6 +106,7 @@ powershell.exe -ExecutionPolicy Bypass -File "install.ps1"
 ```powershell
 powershell.exe -ExecutionPolicy Bypass -File "uninstall.ps1"
 ```
+<img width="456" height="381" alt="image" src="https://github.com/user-attachments/assets/f5b60946-ec5e-4aba-9c63-c4e4be319ba0" />
 
 For detection rules, use a custom detection script and upload `detection.ps1`.
 
@@ -116,4 +118,5 @@ Choose whether the printer should be:
 - `Available` in Company Portal
 
 In this example, the printer is configured as **Available** for all users.
- 
+<img width="495" height="405" alt="image" src="https://github.com/user-attachments/assets/3acf21a3-6d73-4cd2-838a-b63e910badf1" />
+
