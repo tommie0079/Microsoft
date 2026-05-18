@@ -8,10 +8,10 @@ This repository contains a simple workflow for packaging and deploying a network
 2. Reserve a static IP address for the printer in UniFi so the address does not change.
 3. Optional: Add the printer manually on a Windows client to confirm that printing works over the network.
 4. Download the printer driver for later use.
-	In many cases, HP `.exe` driver packages can be extracted with 7-Zip instead of being installed directly. The folder you need is typically:
+	In many cases, vendor `.exe` driver packages can be extracted with 7-Zip instead of being installed directly. The folder you need is typically a `UPD` folder inside the extracted package, for example:
 
 	```text
-	SamsungUniversalDriver\Printer\UPD
+	SomeDriverPackage\Printer\UPD
 	```
 
 	Copy the entire `UPD` folder into this project.
@@ -28,15 +28,27 @@ Create a packaging folder that contains:
 
 Then adapt the PowerShell scripts to match your printer and environment.
 
+If you want help updating `install.ps1` for a new driver package, you can run:
+
+```powershell
+powershell.exe -ExecutionPolicy Bypass -File ".\Update-DriverConfig.ps1"
+```
+
+The helper script scans the `UPD` folder for printer `.inf` files, lets you choose a detected driver if there is more than one, and then updates `DriverName` and `INFFileName` in `install.ps1` automatically.
+If you already know which option number you want, you can run it non-interactively, for example `powershell.exe -ExecutionPolicy Bypass -File ".\Update-DriverConfig.ps1" -Selection 1`.
+It also copies `PrinterName` and `PrinterIP` from `install.ps1` into `uninstall.ps1`, and copies `PrinterName` into `detection.ps1`, so the scripts stay aligned.
+
 The current example in this repository is set up for the HP driver package already placed in `UPD`:
 
 - `DriverName = "HP Universal Printing PS"`
 - `INFFileName = "hpcu355z.inf"`
 
-Also update these values before packaging:
+Before packaging, update these values in `install.ps1`:
 
-- `PrinterName` in `install.ps1`, `uninstall.ps1`, and `detection.ps1`
-- `PrinterIP` in `install.ps1` and `uninstall.ps1`
+- `PrinterName` in `install.ps1`
+- `PrinterIP` in `install.ps1`
+
+Then run `Update-DriverConfig.ps1` so those values are synced to the other scripts.
 
 ## How to change the driver next time
 
@@ -60,8 +72,17 @@ $DriverName = "HP Universal Printing PS"
 $INFFileName = "hpcu355z.inf"
 ```
 
-Keep `PrinterName` identical in all three scripts, or detection and uninstall will not match the installed printer.
+Keep `PrinterName` identical in all three scripts, or detection and uninstall will not match the installed printer. If you use `Update-DriverConfig.ps1`, it will sync that for you.
 
+You can either do those steps manually, or run `Update-DriverConfig.ps1` to update `install.ps1` and sync the other scripts for you.
+
+## Recommended workflow
+
+1. Extract the printer driver package and copy its `UPD` folder into this project.
+2. Edit `PrinterName` and `PrinterIP` in `install.ps1`.
+3. Run `Update-DriverConfig.ps1`.
+4. Confirm that `install.ps1`, `uninstall.ps1`, and `detection.ps1` now have the expected values.
+5. Package the app as `.intunewin` and upload it to Intune.
 
 ## Package the App
 
@@ -75,8 +96,6 @@ Package the application as an `.intunewin` file by using Microsoft Win32 Content
 4. Upload the `.intunewin` file you created in the previous step.
 5. Add a clear name, description, and icon so the app looks good in Company Portal.
 
-<img width="496" height="595" alt="Uten navn" src="https://github.com/user-attachments/assets/38bc989a-ccb6-48c5-9716-676f6bbe1f6b" />
-
 Use the following commands:
 
 ```powershell
@@ -86,9 +105,6 @@ powershell.exe -ExecutionPolicy Bypass -File "install.ps1"
 ```powershell
 powershell.exe -ExecutionPolicy Bypass -File "uninstall.ps1"
 ```
-
-<img width="456" height="381" alt="Uten navn" src="https://github.com/user-attachments/assets/7d0d1277-aed2-4c3a-9e46-5660eaa2b7d1" />
-
 
 For detection rules, use a custom detection script and upload `detection.ps1`.
 
@@ -101,4 +117,3 @@ Choose whether the printer should be:
 
 In this example, the printer is configured as **Available** for all users.
  
-<img width="495" height="405" alt="Uten navn" src="https://github.com/user-attachments/assets/4ff88f67-1f01-4e81-9219-66d4c633efb1" />
