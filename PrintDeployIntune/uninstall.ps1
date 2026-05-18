@@ -1,6 +1,6 @@
 # --- Config ---
 
-$PrinterName = "Printer på kontoret"
+$PrinterName = "Printer pÃ¥ kontoret"
 $PrinterIP = "192.168.1.52"
 $PortName = "IP_$PrinterIP"
 
