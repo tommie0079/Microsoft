@@ -1,7 +1,7 @@
 # Package-Printer.bat Guide
 
 This guide is only for using `Package-Printer.bat`.
-<img width="1478" height="753" alt="image" src="https://github.com/user-attachments/assets/e10fb394-11b5-477b-97df-12cbb8d922ec" />
+<img width="1480" height="759" alt="Uten navn" src="https://github.com/user-attachments/assets/a8c0d578-0a94-4982-a54e-2c1ccefc0b82" />
 ## What this does
 
 `Package-Printer.bat` helps you prepare and package the printer deployment into an `.intunewin` file.
