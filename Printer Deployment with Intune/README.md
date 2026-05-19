@@ -5,6 +5,6 @@
 
 To see more about how the script works, go to: create the package manually
    
-3. Upload the .intunewin file to intune
+2. Upload the .intunewin file to intune
 
    
