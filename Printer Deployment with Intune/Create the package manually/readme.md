@@ -25,12 +25,15 @@ Create a packaging folder that contains:
 - `install.ps1`
 - `uninstall.ps1`
 - `detection.ps1`
+- `Set-PrinterIP.ps1`
 
 Example structure:
 
 ```text
 PrintDeployIntune\
 |-- Package-Printer.bat
+|-- Set-PrinterIP.ps1
+|-- Set-PrinterName.ps1
 |-- Update-DriverConfig.ps1
 |-- install.ps1
 |-- uninstall.ps1
@@ -98,10 +101,12 @@ You can either do those steps manually, or run `Update-DriverConfig.ps1` to upda
 1. Extract the printer driver package and copy its `UPD` folder into this project.
 2. Edit `PrinterName` and `PrinterIP` in `install.ps1`.
 3. Run `Package-Printer.bat` and choose option `1` to update the driver config.
-4. If needed, use option `2` to download `IntuneWinAppUtil.exe`.
-5. Use option `3` to create the `.intunewin` package.
-6. Use option `4` if you want to open the `Output` folder directly.
-7. Upload the generated `.intunewin` file to Intune.
+4. Use option `2` if you want to set or change the printer IP.
+5. Use option `3` if you want to set or change the printer name.
+6. If needed, use option `4` to download `IntuneWinAppUtil.exe`.
+7. Use option `5` to create the `.intunewin` package.
+8. Use option `6` if you want to open the `Output` folder directly.
+9. Upload the generated `.intunewin` file to Intune.
 
 ## Quick start with Package-Printer.bat
 
@@ -114,9 +119,11 @@ Package-Printer.bat
 It gives you these options:
 
 1. `Update driver config`
-2. `Install IntuneWinAppUtil.exe`
-3. `Create .intunewin`
-4. `Open Output folder`
+2. `Set printer IP`
+3. `Set printer name`
+4. `Install IntuneWinAppUtil.exe`
+5. `Create .intunewin`
+6. `Open Output folder`
 
 This is the recommended workflow for normal use. The manual steps below are still available if you want to run each step yourself.
 
@@ -161,6 +168,3 @@ Example if you package directly from this repository:
 
 That works because `install.ps1` and the `UPD` folder are already in the repository root.
 If you use the repository root as the source, all files in the folder are included in the package, not only `install.ps1`.
-
-
-
