@@ -22,7 +22,7 @@ echo 5. Create .intunewin
 echo 6. Open Output folder
 echo 0. Exit
 echo.
-echo credits: https://github.com/tommie0079
+echo credits: Tommie ^& Vegard
 echo.
 set /p "choice=Choose an option: "
 
