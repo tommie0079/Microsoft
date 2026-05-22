@@ -112,6 +112,8 @@ For initial testing:
 4. Add an app such as Outlook.
 5. Select and sync the app.
 6. Assign it to **All devices** to test the function.
+<img width="873" height="434" alt="Uten navn" src="https://github.com/user-attachments/assets/704f9765-193c-4054-8604-84203371d61e" />
+
 7. After testing, create dynamic groups for Android mobile devices if needed.
 8. Make sure the apps are actually assigned.
 9. If you are not using dynamic Android groups yet, you can assign apps to **All devices** during testing.
@@ -125,7 +127,5 @@ On the phone or tablet:
 3. A prompt to scan the QR code should appear.
 4. Scan the enrollment QR code and continue the setup.
 
-## Notes
+<img width="272" height="269" alt="Uten navn" src="https://github.com/user-attachments/assets/e121bd77-bbda-4c03-905c-fc1c04a70fbf" />
 
-- The original source referred to example screenshots, but they were not included in the text export.
-- Add screenshots to this README later if you want a more complete GitHub guide.
