@@ -87,6 +87,7 @@ Intune requires a URL that points to a wallpaper image. One option is to upload 
 ## Create a Configuration Profile
 
 Configure the profile under **Devices > Android > Configuration > Configuration profiles**.
+<img width="2427" height="997" alt="Uten navn" src="https://github.com/user-attachments/assets/40317082-b7ae-4260-b312-e7140ce2e083" />
 
 For initial testing:
 
