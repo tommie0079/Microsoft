@@ -42,6 +42,9 @@ Microsoft Intune Plan 1 is required. This is included in Microsoft Developer sub
 3. Select **Connect to Google now**.
 4. Sign in with a Microsoft account or Gmail account.
 5. When the confirmation message appears, continue to the next step.
+If this message shows, press here to continue
+<img width="581" height="316" alt="Uten navn" src="https://github.com/user-attachments/assets/d569e011-6fe9-4c59-b373-366695d8de2e" />
+
 
 ## Create an Enrollment Profile
 
