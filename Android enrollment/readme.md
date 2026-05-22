@@ -97,9 +97,12 @@ For initial testing:
 
 ## Create a Compliance Policy
 
-1. Go to **Devices > Android > Compliance policies**.
-2. Require users to use a device passcode.
-3. Assign the policy to **All devices** for initial testing.
+1. Go to **Devices > Android > Compliance policies**. Require users to use a device passcode. 
+   <img width="664" height="707" alt="Uten navn" src="https://github.com/user-attachments/assets/6ded7159-1e7d-4b26-aed0-7254ad1c2382" />
+
+2. Assign the policy to **All devices** for initial testing.
+   <img width="868" height="341" alt="Uten navn" src="https://github.com/user-attachments/assets/855fffba-2cfb-4378-b22f-ddb8cf8caacd" />
+
 
 ## Deploy Apps
 
