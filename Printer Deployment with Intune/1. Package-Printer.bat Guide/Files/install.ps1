@@ -1,7 +1,7 @@
 # --- Config ---
 
 $PrinterName = "printertest2"
-$PrinterIP = "192.168.1.138"
+$PrinterIP = "printerrrrrr"
 $PortName = "IP_$PrinterIP"
 
 # Prefer the built-in class driver and only use UPD if it is already present locally.
@@ -75,6 +75,12 @@ try {
 	$existingPrinter = Get-Printer -Name $PrinterName -ErrorAction SilentlyContinue
 	if ($existingPrinter) {
 		Write-Log "Printer already present: $PrinterName"
+		if ($existingPrinter.PortName -ne $PortName) {
+			Write-Log "Updating printer port from '$($existingPrinter.PortName)' to '$PortName'"
+			Set-Printer -Name $PrinterName -PortName $PortName
+		} else {
+			Write-Log "Printer already uses target port: $PortName"
+		}
 	} else {
 		Write-Log "Creating printer: $PrinterName"
 		Add-Printer -Name $PrinterName -DriverName $DriverName -PortName $PortName
@@ -86,6 +92,8 @@ try {
 	Write-Log "ERROR: $($_.Exception.Message)"
 	throw
 }
+
+
 
 
 
