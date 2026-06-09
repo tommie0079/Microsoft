@@ -73,6 +73,8 @@ This runs `Update-DriverConfig.ps1`, which:
 - updates `DriverName` and `INFFileName` in `install.ps1`
 - syncs `PrinterName` and `PrinterIP` to the other scripts
 
+Make sure the chosen `.inf` supports the Windows architecture on the target devices. For example, an `NTARM64`-only HP INF will not install on normal Windows x64 clients.
+
 ### Step 2: Set printer IP
 
 Choose option `2`.
