@@ -43,6 +43,28 @@ function Replace-ScriptAssignment {
     )
 }
 
+function Update-PreferredDriverNames {
+    param(
+        [string]$Content,
+        [string]$DriverName
+    )
+
+    $arrayPattern = '(?ms)^\$PreferredDriverNames\s*=\s*@\(\s*(?<Entries>.*?)\s*\)'
+
+    if (-not [regex]::IsMatch($Content, $arrayPattern)) {
+        return $null
+    }
+
+    $replacement = @(
+        '$PreferredDriverNames = @('
+        ('{0}"{1}"' -f "`t", 'HP LaserJet P4515 PCL6 Class Driver')
+        ('{0}"{1}"' -f "`t", $DriverName)
+        ')'
+    ) -join [Environment]::NewLine
+
+    return [regex]::Replace($Content, $arrayPattern, $replacement, 1)
+}
+
 function Get-ScriptAssignment {
     param(
         [string]$Content,
@@ -114,8 +136,15 @@ if ($candidates.Count -eq 1) {
 
 $installScriptContent = Get-Content -Path $InstallScriptPath -Raw -ErrorAction Stop
 $updatedContent = $installScriptContent
-$updatedContent = Replace-ScriptAssignment -Content $updatedContent -VariableName 'DriverName' -Value $selectedCandidate.DriverName
-$updatedContent = Replace-ScriptAssignment -Content $updatedContent -VariableName 'INFFileName' -Value $selectedCandidate.INFFileName
+
+$preferredDriverContent = Update-PreferredDriverNames -Content $updatedContent -DriverName $selectedCandidate.DriverName
+
+if ($null -ne $preferredDriverContent) {
+    $updatedContent = $preferredDriverContent
+} else {
+    $updatedContent = Replace-ScriptAssignment -Content $updatedContent -VariableName 'DriverName' -Value $selectedCandidate.DriverName
+    $updatedContent = Replace-ScriptAssignment -Content $updatedContent -VariableName 'INFFileName' -Value $selectedCandidate.INFFileName
+}
 
 Set-Content -Path $InstallScriptPath -Value $updatedContent -Encoding UTF8
 
@@ -133,8 +162,12 @@ $updatedDetectionContent = Replace-ScriptAssignment -Content $detectionScriptCon
 Set-Content -Path $DetectionScriptPath -Value $updatedDetectionContent -Encoding UTF8
 
 Write-Host 'Updated install.ps1 with:'
-Write-Host ("DriverName = `"{0}`"" -f $selectedCandidate.DriverName)
-Write-Host ("INFFileName = `"{0}`"" -f $selectedCandidate.INFFileName)
+if ($null -ne $preferredDriverContent) {
+    Write-Host ("PreferredDriverNames fallback = `"{0}`"" -f $selectedCandidate.DriverName)
+} else {
+    Write-Host ("DriverName = `"{0}`"" -f $selectedCandidate.DriverName)
+    Write-Host ("INFFileName = `"{0}`"" -f $selectedCandidate.INFFileName)
+}
 Write-Host 'Synced shared config:'
 Write-Host ("PrinterName = `"{0}`"" -f $printerName)
 Write-Host ("PrinterIP = `"{0}`"" -f $printerIP)
