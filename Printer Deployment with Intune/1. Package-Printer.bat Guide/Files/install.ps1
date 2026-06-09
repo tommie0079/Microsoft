@@ -6,7 +6,7 @@ $PortName = "IP_$PrinterIP"
 
 # Change these two values when you replace the driver package in UPD.
 $DriverName = "HP Universal Printing PCL 6"
-$INFFileName = "hpcu360y.inf"
+$INFFileName = "hpcu360u.inf"
 $INFPath = "$PSScriptRoot\UPD\$INFFileName"
 $PnPUtilPath = if (Test-Path "$env:windir\SysNative\pnputil.exe") {
 	"$env:windir\SysNative\pnputil.exe"
@@ -15,6 +15,8 @@ $PnPUtilPath = if (Test-Path "$env:windir\SysNative\pnputil.exe") {
 }
 $LogDirectory = Join-Path $env:ProgramData "PrinterDeployIntune"
 $LogPath = Join-Path $LogDirectory "install.log"
+$LegacyLogDirectory = Join-Path $env:ProgramData "PrinterDeployment"
+$LegacyLogPath = Join-Path $LegacyLogDirectory "install.log"
 
 $ErrorActionPreference = "Stop"
 
@@ -27,6 +29,9 @@ function Write-Log {
 	$timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 	$entry = "$timestamp $Message"
 	Add-Content -Path $LogPath -Value $entry
+	if ($LegacyLogPath -ne $LogPath) {
+		Add-Content -Path $LegacyLogPath -Value $entry
+	}
 	Write-Output $entry
 }
 
@@ -68,6 +73,10 @@ function Get-InfSupportedArchitectures {
 
 if (-not (Test-Path $LogDirectory)) {
 	New-Item -ItemType Directory -Path $LogDirectory -Force | Out-Null
+}
+
+if (-not (Test-Path $LegacyLogDirectory)) {
+	New-Item -ItemType Directory -Path $LegacyLogDirectory -Force | Out-Null
 }
 
 try {
@@ -134,6 +143,7 @@ try {
 	Write-Log "ERROR: $($_.Exception.Message)"
 	throw
 }
+
 
 
 
