@@ -1,12 +1,12 @@
 # --- Config ---
 
-$PrinterName = "Printer 3. etg"
-$PrinterIP = "192.168.1.15"
+$PrinterName = "printer igor"
+$PrinterIP = "192.168.1.138"
 $PortName = "IP_$PrinterIP"
 
 # Change these two values when you replace the driver package in UPD.
 $DriverName = "HP Universal Printing PCL 6"
-$INFFileName = "hpcu345u.inf"
+$INFFileName = "hpcu360y.inf"
 $INFPath = "$PSScriptRoot\UPD\$INFFileName"
 $PnPUtilPath = if (Test-Path "$env:windir\SysNative\pnputil.exe") {
 	"$env:windir\SysNative\pnputil.exe"
@@ -30,6 +30,42 @@ function Write-Log {
 	Write-Output $entry
 }
 
+function Get-OSArchitecture {
+	if ($env:PROCESSOR_ARCHITEW6432) {
+		return $env:PROCESSOR_ARCHITEW6432.ToUpperInvariant()
+	}
+
+	return $env:PROCESSOR_ARCHITECTURE.ToUpperInvariant()
+}
+
+function Get-InfSupportedArchitectures {
+	param(
+		[Parameter(Mandatory = $true)]
+		[string]$Path
+	)
+
+	$architectures = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::OrdinalIgnoreCase)
+	$sectionHeaders = Select-String -Path $Path -Pattern '^\[(?<Section>[^\]]+)\]$'
+
+	foreach ($header in $sectionHeaders) {
+		$sectionName = $header.Matches[0].Groups['Section'].Value
+
+		if ($sectionName -match '(^|\.)(NTamd64)(\.|$)') {
+			[void]$architectures.Add('AMD64')
+		}
+
+		if ($sectionName -match '(^|\.)(NTARM64)(\.|$)') {
+			[void]$architectures.Add('ARM64')
+		}
+
+		if ($sectionName -match '(^|\.)(NTx86)(\.|$)') {
+			[void]$architectures.Add('X86')
+		}
+	}
+
+	return @($architectures)
+}
+
 if (-not (Test-Path $LogDirectory)) {
 	New-Item -ItemType Directory -Path $LogDirectory -Force | Out-Null
 }
@@ -45,10 +81,17 @@ try {
 		throw "pnputil.exe not found: $PnPUtilPath"
 	}
 
+	$currentArchitecture = Get-OSArchitecture
+	$supportedArchitectures = Get-InfSupportedArchitectures -Path $INFPath
+	if ($supportedArchitectures.Count -gt 0 -and $supportedArchitectures -notcontains $currentArchitecture) {
+		throw "Driver INF '$INFFileName' supports [$($supportedArchitectures -join ', ')] but this OS is $currentArchitecture. Use a matching driver package for this device architecture."
+	}
+
 	# --- Install printer ---
 
 	Write-Log "Adding driver package with pnputil.exe at '$PnPUtilPath'"
-	& $PnPUtilPath /add-driver $INFPath /install 2>&1 | ForEach-Object {
+	$pnputilOutput = & $PnPUtilPath /add-driver $INFPath /install 2>&1
+	$pnputilOutput | ForEach-Object {
 		Write-Log "pnputil: $_"
 	}
 
@@ -56,11 +99,18 @@ try {
 		throw "pnputil.exe failed with exit code $LASTEXITCODE"
 	}
 
+	$publishedNameMatch = $pnputilOutput | Select-String -Pattern 'Published Name:\s*(?<PublishedName>\S+)' | Select-Object -First 1
+	$driverStoreInfPath = if ($publishedNameMatch) {
+		$publishedNameMatch.Matches[0].Groups['PublishedName'].Value
+	} else {
+		$INFFileName
+	}
+
 	if (Get-PrinterDriver -Name $DriverName -ErrorAction SilentlyContinue) {
 		Write-Log "Printer driver already present: $DriverName"
 	} else {
-		Write-Log "Installing printer driver: $DriverName"
-		Add-PrinterDriver -Name $DriverName
+		Write-Log "Installing printer driver: $DriverName from '$driverStoreInfPath'"
+		Add-PrinterDriver -Name $DriverName -InfPath $driverStoreInfPath
 	}
 
 	if (Get-PrinterPort -Name $PortName -ErrorAction SilentlyContinue) {
@@ -84,6 +134,9 @@ try {
 	Write-Log "ERROR: $($_.Exception.Message)"
 	throw
 }
+
+
+
 
 
 
