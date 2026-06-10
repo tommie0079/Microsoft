@@ -115,10 +115,13 @@ For initial testing:
 5. Select and sync the app.
 6. Assign it to **All devices** to test the function.
 <img width="873" height="434" alt="Uten navn" src="https://github.com/user-attachments/assets/704f9765-193c-4054-8604-84203371d61e" />
+7. Also make sure Microsoft Launcher is assigned
+<img width="1662" height="712" alt="image" src="https://github.com/user-attachments/assets/d9e9c559-7efe-470c-a512-eeadf45afe9d" />
 
-7. After testing, create dynamic groups for Android mobile devices if needed.
-8. Make sure the apps are actually assigned.
-9. If you are not using dynamic Android groups yet, you can assign apps to **All devices** during testing.
+
+8. After testing, create dynamic groups for Android mobile devices if needed.
+9. Make sure the apps are actually assigned.
+10. If you are not using dynamic Android groups yet, you can assign apps to **All devices** during testing.
 
 ## Functional Test
 
