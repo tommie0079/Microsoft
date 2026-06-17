@@ -52,7 +52,10 @@ If this message shows, press here to continue
 ## Create an Enrollment Profile
 
 1. Create a standard profile under **Corporate-owned fully managed user devices**.
-2. Save the QR code so it can be used later for testing.
+<img width="1962" height="550" alt="image" src="https://github.com/user-attachments/assets/70708124-4d50-4eab-b162-38a974b27d46" />
+
+ 
+3. Save the QR code so it can be used later for testing.
 <img width="289" height="305" alt="Uten navn" src="https://github.com/user-attachments/assets/49e01f44-dea6-4a7d-8e72-42ff4c1e4b7c" />
 
 
