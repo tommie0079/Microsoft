@@ -14,6 +14,8 @@ A short step-by-step guide to enable and configure **Global Secure Access (GSA)*
 1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com).
 2. Go to **Global Secure Access** > **Get started**.
 3. Select **Activate Global Secure Access** to enable the service in your tenant.
+<img width="2036" height="1007" alt="image" src="https://github.com/user-attachments/assets/f0876db0-8dfc-418f-b094-bf7d39fce070" />
+
 
 ## Step 2 — Enable Traffic Forwarding Profiles
 
