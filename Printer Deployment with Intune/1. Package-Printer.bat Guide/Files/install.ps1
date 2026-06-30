@@ -1,14 +1,18 @@
 # --- Config ---
 
-$PrinterName = "printertest2"
-$PrinterIP = "printerrrrrr"
+$PrinterName = "VGS printer test 29-06"
+$PrinterIP = "192.168.1.138"
 $PortName = "IP_$PrinterIP"
 
-# Prefer the built-in class driver and only use UPD if it is already present locally.
+# Prefer the built-in class driver and fall back to the driver bundled in the package.
 $PreferredDriverNames = @(
-	"HP LaserJet P4515 PCL6 Class Driver",
+	"HP LaserJet P4515 PCL6 Class Driver"
 	"HP Universal Printing PCL 6"
 )
+
+# Driver bundled inside the package (UPD folder shipped in the .intunewin).
+$BundledDriverModelName = "HP Universal Printing PCL 6"
+$BundledDriverInfName = "hpcu360y.inf"
 $LogDirectory = Join-Path $env:ProgramData "PrinterDeployIntune"
 $LogPath = Join-Path $LogDirectory "install.log"
 $LegacyLogDirectory = Join-Path $env:ProgramData "PrinterDeployment"
@@ -46,6 +50,43 @@ function Resolve-PrinterDriverName {
 	return $null
 }
 
+function Install-BundledPrinterDriver {
+	param(
+		[Parameter(Mandatory = $true)]
+		[string]$InfName,
+		[Parameter(Mandatory = $true)]
+		[string]$ModelName
+	)
+
+	$infPath = Join-Path $PSScriptRoot (Join-Path "UPD" $InfName)
+	if (-not (Test-Path $infPath)) {
+		throw "Bundled driver INF not found in package: $infPath"
+	}
+
+	Write-Log "Staging bundled driver into the driver store: $infPath"
+	$pnputilOutput = & pnputil.exe /add-driver "$infPath" /install 2>&1
+	$pnputilExit = $LASTEXITCODE
+	foreach ($line in $pnputilOutput) {
+		Write-Log "pnputil: $line"
+	}
+
+	# pnputil returns 0 on success and 3010 when a reboot is required; both mean the driver was staged.
+	if ($pnputilExit -ne 0 -and $pnputilExit -ne 3010) {
+		throw "pnputil failed to stage bundled driver '$InfName' (exit code $pnputilExit)."
+	}
+
+	if (-not (Get-PrinterDriver -Name $ModelName -ErrorAction SilentlyContinue)) {
+		Write-Log "Registering printer driver: $ModelName"
+		Add-PrinterDriver -Name $ModelName
+	}
+
+	if (-not (Get-PrinterDriver -Name $ModelName -ErrorAction SilentlyContinue)) {
+		throw "Driver '$ModelName' was not available after staging bundled INF '$InfName'."
+	}
+
+	return $ModelName
+}
+
 if (-not (Test-Path $LogDirectory)) {
 	New-Item -ItemType Directory -Path $LogDirectory -Force | Out-Null
 }
@@ -59,7 +100,8 @@ try {
 
 	$DriverName = Resolve-PrinterDriverName -CandidateNames $PreferredDriverNames
 	if (-not $DriverName) {
-		throw "None of the preferred printer drivers are installed: $($PreferredDriverNames -join ', '). Install one of them on the target device first."
+		Write-Log "No preferred driver present. Installing bundled driver '$BundledDriverModelName' from package."
+		$DriverName = Install-BundledPrinterDriver -InfName $BundledDriverInfName -ModelName $BundledDriverModelName
 	}
 
 	# --- Install printer ---
@@ -92,6 +134,11 @@ try {
 	Write-Log "ERROR: $($_.Exception.Message)"
 	throw
 }
+
+
+
+
+
 
 
 
