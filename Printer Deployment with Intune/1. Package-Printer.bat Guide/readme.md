@@ -1,4 +1,8 @@
 # Package-Printer.bat guide
+Testet with:
+
+* HP LaserJet Enterprise MFP M577
+* HP LaserJet P4515x
 
 This guide is only for using `Package-Printer.bat`.
 <img width="1473" height="756" alt="Uten navn" src="https://github.com/user-attachments/assets/d4ebccbd-137b-4bd6-a52a-b3da0c3fe77e" />
