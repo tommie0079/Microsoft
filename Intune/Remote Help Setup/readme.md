@@ -21,7 +21,9 @@
 
 ## Roll out the Remote Help app to clients
 
-1. Download the script from GitHub to package `remotehelp.exe` into an `.intunewin` file
+1. Download the Remote Help installer from Microsoft:
+   https://aka.ms/downloadremotehelp
+2. Download the script from GitHub to package `remotehelp.exe` into an `.intunewin` file
    1. Download the **Microsoft Win32 Content Prep Tool** (`IntuneWinAppUtil.exe`) from GitHub: https://github.com/microsoft/Microsoft-Win32-Content-Prep-Tool
    2. Put `remotehelpinstaller.exe` in a source folder, e.g. `C:\RemoteHelp\Source`
    3. Run `IntuneWinAppUtil.exe` from a command prompt
@@ -31,10 +33,8 @@
       - Output folder: e.g. `C:\RemoteHelp\Output`
       - Catalog folder: `N` (no)
    5. The tool creates `remotehelpinstaller.intunewin` in the output folder, ready to upload to Intune
-3. Download the Remote Help installer from Microsoft:
-   https://aka.ms/downloadremotehelp
-4. In Intune, create a **Win32 app**
-5. Upload the `.intunewin` file
+3. In Intune, create a **Win32 app**
+4. Upload the `.intunewin` file
 
 ### Install
 
