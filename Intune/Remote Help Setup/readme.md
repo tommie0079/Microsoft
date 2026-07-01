@@ -56,7 +56,8 @@ Then add a file-based detection rule for Remote Help:
 ## Start a remote session
 
 > **IMPORTANT!** This must be done from a PC in the same domain, not from another PC connected to a different domain!
-<img width="945" height="347" alt="image" src="https://github.com/user-attachments/assets/db281303-331f-4b13-992b-e9d317d904bb" />
+<img width="2143" height="1092" alt="image" src="https://github.com/user-attachments/assets/526a26c5-66eb-4f9e-af1a-7a13770180d8" />
+
 
 Make sure the user is logged in to the Company Portal.
 
