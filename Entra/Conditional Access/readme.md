@@ -169,7 +169,17 @@ Same steps as 4.2, but target **`CA-Staff`** instead of `CA-Admins`.
 9. The user signs in with their username; the sign-in screen automatically asks for the Temporary Access Pass. They enter the code and are in — **no CA exclusions needed**, and the pass can never be used again.
 
 ### 5.2 Access Reviews (requires Entra ID P2)
-If you do use exclusion groups, wrap them in a review so no one stays excluded forever:
+
+**Why do we need this?** In real life, users end up in exclusion groups: "Charles can't log in, just exclude him from the MFA policy for now." The problem is that **everyone forgets to remove them afterwards**. Six months later, Charles is still excluded — he can sign in without MFA, and nobody remembers why. Every forgotten exclusion is a **permanent hole in your security** that an attacker only needs a stolen password to walk through.
+
+Access Reviews solve this by forcing a **regular, documented check** of who is in these groups:
+- A responsible person must **actively confirm** each member still needs the exclusion, with a justification.
+- If nobody responds, access can be **removed automatically** — so exclusions expire instead of living forever.
+- You get an **audit trail** showing that exclusions are reviewed (useful for compliance/revision).
+
+In short: TAP (5.1) prevents *new* permanent exclusions, and Access Reviews clean up the ones that still happen.
+
+**Setup:**
 1. **ID Governance** > **Access reviews** > **New access review**.
 2. Review scope: **Teams + Groups** > select your exclusion group(s) > All users.
 3. Reviewers: pick a responsible person (e.g. the owner/manager).
