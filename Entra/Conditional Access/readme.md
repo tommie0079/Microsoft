@@ -4,6 +4,16 @@
 >
 > Requires Microsoft 365 Business Premium (Entra ID P1). Policy 5 and Access Reviews require Entra ID P2/E5.
 
+## Policy states: Report-only vs On vs Off
+
+| State | What it means |
+|---|---|
+| **Report-only** | The policy is *evaluated* and the result is logged in the sign-in logs, but it is **not enforced** — no one gets blocked. Use this to safely test a policy before enabling it. |
+| **On** | The policy is **enforced**. Users who don't meet the conditions are blocked or challenged (e.g. asked for MFA). |
+| **Off** | The policy is disabled — not evaluated and not enforced. Useful for temporarily disabling a policy without deleting it. |
+
+> Best practice: create new policies in **Report-only**, review the sign-in logs for a few days to see who *would* be affected, then switch to **On**.
+
 ## 0. Preparation
 1. Sign in at **admin.microsoft.com** > **Admin centers** > **Identity** (Entra admin center).
 2. Go to **Entra ID** > **Conditional Access** > **Policies**.
