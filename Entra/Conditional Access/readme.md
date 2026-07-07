@@ -84,8 +84,32 @@
 
 > ⚠️ Notes: Attackers can bypass this with a VPN, so keep MFA as the main control. Plan for travelling staff (add countries temporarily, or use a TAP/exclusion group with access reviews). Location is based on IP, so unknown/unmapped IPs may behave unexpectedly.
 
-## 3. Personas (groups)
-1. Create static groups in Entra ID: `CA-Admins`, `CA-Staff`, `CA-Guests`, `CA-BreakGlass`.
+## 3. Create the persona groups
+
+### Static groups (simple start)
+1. Go to **Entra ID** > **Groups** > **All groups** > **New group**.
+2. Group type: **Security**. Membership type: **Assigned**.
+3. Create: `CA-Admins`, `CA-Staff`, `CA-Guests`, `CA-BreakGlass`.
+4. Add members manually to each group.
+
+### Dynamic groups (recommended when you scale — requires Entra ID P1)
+Members are added/removed **automatically** based on a rule, so no one is forgotten.
+1. **New group** > Group type: **Security** > Membership type: **Dynamic User**.
+2. Click **Add dynamic query** and build a rule, e.g.:
+
+| Group | Example rule |
+|---|---|
+| `CA-Staff` | `(user.accountEnabled -eq true) and (user.userType -eq "Member")` |
+| `CA-Guests` | `(user.userType -eq "Guest")` |
+| `CA-Admins` | Keep **static** – admin roles should be assigned deliberately |
+| `CA-BreakGlass` | Keep **static** – only the two emergency accounts |
+
+3. Click **Validate Rules** to test against real users, then **Save** > **Create**.
+
+> ⚠️ Tip: exclude break glass accounts from the staff rule if needed, e.g. `... and (user.displayName -notContains "BreakGlass")`. Dynamic membership can take a few minutes to update after a change.
+
+## 4. Personas (policies)
+1. Target the groups created above in your policies.
 2. Create persona policies:
    - `Admins - All apps - Require phishing-resistant MFA` (Grant: authentication strength > *Phishing-resistant MFA*).
    - `Admins - All apps - Require company-owned compliant device` (Conditions > Filter for devices: ownership = company; Grant: *Require device to be marked as compliant*).
@@ -94,6 +118,6 @@
 3. When multiple policies apply to a user, the strictest policy wins.
 4. Test new policies in **Report-only** before switching them **On**.
 
-## 4. Exceptions (without permanent exclusions)
+## 5. Exceptions (without permanent exclusions)
 - **Temporary Access Pass (TAP)**: Verify the user > **Users** > select user > **Authentication methods** > **Add** > *Temporary Access Pass* > set **One-time use** > give the code to the user.
 - **Access Reviews** (requires P2): **ID Governance** > **Access reviews** > New review of your exclusion groups, monthly, with justification required – so no one stays excluded forever.
