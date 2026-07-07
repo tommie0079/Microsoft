@@ -152,5 +152,27 @@ Same steps as 4.2, but target **`CA-Staff`** instead of `CA-Admins`.
 5. **Report-only** > **Create**.
 
 ## 5. Exceptions (without permanent exclusions)
-- **Temporary Access Pass (TAP)**: Verify the user > **Users** > select user > **Authentication methods** > **Add** > *Temporary Access Pass* > set **One-time use** > give the code to the user.
-- **Access Reviews** (requires P2): **ID Governance** > **Access reviews** > New review of your exclusion groups, monthly, with justification required – so no one stays excluded forever.
+### 5.1 Give a user a Temporary Access Pass (TAP) – step by step
+> Scenario: a user (e.g. the CEO) left their phone/security key at home and can't complete MFA. Do **not** exclude them from policies — give them a TAP instead.
+
+1. **Verify the user's identity** — make sure it's really them (call back on a known number, video call, in person).
+2. Check TAP is enabled as an authentication method: **Entra ID** > **Authentication methods** > **Policies** > **Temporary Access Pass** > enabled for all users (or a group).
+3. Go to **Entra ID** > **Users** > select the user.
+4. Open **Authentication methods**.
+5. Click **+ Add authentication method** > select **Temporary Access Pass**.
+6. Configure:
+   - **One-time use**: **Yes** (the pass dies after first sign-in).
+   - **Duration**: keep it short (e.g. 1 hour) — enough for the user to sign in.
+   - Optionally a **delayed start time** if needed.
+7. Click **Add** — the pass is displayed **once**. Copy it.
+8. Give the code to the user through a secure channel (read it over the phone — don't email it).
+9. The user signs in with their username; the sign-in screen automatically asks for the Temporary Access Pass. They enter the code and are in — **no CA exclusions needed**, and the pass can never be used again.
+
+### 5.2 Access Reviews (requires Entra ID P2)
+If you do use exclusion groups, wrap them in a review so no one stays excluded forever:
+1. **ID Governance** > **Access reviews** > **New access review**.
+2. Review scope: **Teams + Groups** > select your exclusion group(s) > All users.
+3. Reviewers: pick a responsible person (e.g. the owner/manager).
+4. Recurrence: **Monthly**, duration e.g. 6 days.
+5. Settings: enable **decision helpers** (e.g. last sign-in), require **justification**, and optionally auto-remove access if the reviewer doesn't respond.
+6. Name the review > **Create**.
