@@ -109,14 +109,37 @@ Members are added/removed **automatically** based on a rule, so no one is forgot
 > ⚠️ Tip: exclude break glass accounts from the staff rule if needed, e.g. `... and (user.displayName -notContains "BreakGlass")`. Dynamic membership can take a few minutes to update after a change.
 
 ## 4. Personas (policies)
-1. Target the groups created above in your policies.
-2. Create persona policies:
-   - `Admins - All apps - Require phishing-resistant MFA` (Grant: authentication strength > *Phishing-resistant MFA*).
-   - `Admins - All apps - Require company-owned compliant device` (Conditions > Filter for devices: ownership = company; Grant: *Require device to be marked as compliant*).
-   - `Staff - All apps - Require company-owned compliant device` (same as above, targeting CA-Staff).
-   - `Guests - All apps - Block mobile and desktop apps` (Conditions > Client apps: uncheck Browser; Grant: Block).
-3. When multiple policies apply to a user, the strictest policy wins.
-4. Test new policies in **Report-only** before switching them **On**.
+
+Target the groups from section 3 in these policies. Remember: when multiple policies apply to a user, the **strictest wins**. Test everything in **Report-only** before switching to **On**.
+
+### 4.1 `Admins - All apps - Require phishing-resistant MFA`
+1. **Users**: `CA-Admins`, exclude `CA-BreakGlass`.
+2. **Target resources**: All resources.
+3. **Grant**: Require authentication strength > **Phishing-resistant MFA**.
+4. **Report-only** > **Create**.
+
+### 4.2 `Admins - All apps - Require company-owned compliant device`
+1. **Users**: `CA-Admins`, exclude `CA-BreakGlass`.
+2. **Target resources**: All resources.
+3. **Conditions** > **Filter for devices**:
+   - Configure: **Yes**.
+   - Select: **Include filtered devices in policy**.
+   - Rule: Property `deviceOwnership` – Operator `Equals` – Value `Company` (rule syntax: `device.deviceOwnership -eq "Company"`).
+   - Click **Done**.
+4. **Grant**: **Grant access** + check **Require device to be marked as compliant** > Select.
+5. **Report-only** > **Create**.
+
+### 4.3 `Staff - All apps - Require company-owned compliant device`
+Same steps as 4.2, but target **`CA-Staff`** instead of `CA-Admins`.
+
+> Note (from the video): smartphones are left out of the staff policy for now — handle mobile devices with a separate policy later.
+
+### 4.4 `Guests - All apps - Block mobile and desktop apps`
+1. **Users**: `CA-Guests`.
+2. **Target resources**: All cloud apps.
+3. **Conditions** > **Client apps**: switch on, **uncheck Browser** (keep mobile apps and desktop clients checked).
+4. **Grant**: **Block access**.
+5. **Report-only** > **Create**.
 
 ## 5. Exceptions (without permanent exclusions)
 - **Temporary Access Pass (TAP)**: Verify the user > **Users** > select user > **Authentication methods** > **Add** > *Temporary Access Pass* > set **One-time use** > give the code to the user.
