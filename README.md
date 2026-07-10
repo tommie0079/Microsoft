@@ -58,14 +58,6 @@ Includes all Windows Autopilot registered devices.
 
 # Additional Useful Dynamic Groups
 
-## All Corporate Windows Devices
-
-```text
-(device.deviceOSType -eq "Windows")
-```
-
----
-
 ## All iOS Devices
 
 ```text
