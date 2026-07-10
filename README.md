@@ -41,7 +41,7 @@ Includes all Windows Autopilot registered devices.
 **Rule**
 
 ```text
-(user.department -eq "Example")
+(user.department -eq "Example") and (user.accountEnabled -eq True)
 ```
 
 ---
