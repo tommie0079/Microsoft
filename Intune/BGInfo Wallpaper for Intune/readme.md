@@ -19,21 +19,23 @@ Download and place these into the repo before packaging:
 | --- | --- |
 | `BGInfo\Bginfo64.exe` | BGInfo executable (download separately) |
 | `BGInfo\Company.bgi` | BGInfo layout (fields + background) |
-| `BGInfo\RefreshBGInfo.ps1` | Writes IPv4 to `HKCU\Software\BGInfo\IPv4`, then runs BGInfo |
+| `BGInfo\RefreshBGInfo.ps1` | Writes IPv4 + serial number to `HKCU\Software\BGInfo`, then runs BGInfo |
 | `BGInfo\install.ps1` | Installer: copies files, sets Run key, runs in user session |
 | `BGInfo\uninstall.ps1` | Removes files, Run key, task, registry, wallpaper |
 | `install.intunewin` | Packaged app to upload to Intune |
 
 ## Configure `Company.bgi` (one‑time, BGInfo GUI)
 
-The IPv4 field reads a **registry value** (VBScript is deprecated and isn't stored in the
-`.bgi`). `RefreshBGInfo.ps1` writes the address; BGInfo just reads it.
+The IPv4 and serial-number fields read a **registry value** (VBScript is deprecated and
+isn't stored in the `.bgi`). `RefreshBGInfo.ps1` writes the values; BGInfo just reads them.
 
 1. Run `Bginfo64.exe`, open `Company.bgi`.
 2. (Optional) **Background** → set your corporate wallpaper bitmap.
 3. **Custom → New**: Identifier `IPv4`, *A registry value*, path
    `HKEY_CURRENT_USER\Software\BGInfo\IPv4`. Add it to the layout.
-4. **File → Save**.
+4. **Custom → New**: Identifier `SerialNumber`, *A registry value*, path
+   `HKEY_CURRENT_USER\Software\BGInfo\SerialNumber`. Add it to the layout.
+5. **File → Save**.
 
 Test locally: set the value, then open the config —
 
