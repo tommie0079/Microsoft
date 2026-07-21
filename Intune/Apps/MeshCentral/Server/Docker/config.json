@@ -1,0 +1,15 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Ylianst/MeshCentral/master/meshcentral-config-schema.json",
+  "settings": {
+    "cert": "192.168.1.45",
+    "port": 443,
+    "redirPort": 80
+  },
+  "domains": {
+    "": {
+      "title": "MeshCentral",
+      "newAccounts": true,
+      "allowedOrigin": ["localhost", "127.0.0.1", "192.168.1.45"]
+    }
+  }
+}
