@@ -1,1 +1,1 @@
-meshagent64-m365vlfk.exe -fullinstall
+meshagent64.exe -fullinstall
