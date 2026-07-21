@@ -61,7 +61,7 @@ Existing accounts keep working; you can still add users from the web UI as admin
    - **Install command:**
 
      ```cmd
-     meshagent64-m365vlfk.exe -fullinstall
+     meshagent64.exe -fullinstall
      ```
 
    - **Uninstall command:**
