@@ -18,5 +18,9 @@ Remove-Item $InstallFolder -Recurse -Force -ErrorAction SilentlyContinue
 # Remove the IPv4 value BGInfo read from.
 Remove-Item -Path "HKCU:\Software\BGInfo" -Recurse -Force -ErrorAction SilentlyContinue
 
+# Remove the policy-enforced image BGInfo fed the "Desktop Image Url" wallpaper.
+# (Remove/repoint the PersonalizationCSP policy separately in Intune.)
+Remove-Item -Path "C:\ProgramData\BGInfo" -Recurse -Force -ErrorAction SilentlyContinue
+
 # Clear the BGInfo-generated (black) wallpaper so the desktop is no longer branded by BGInfo.
 Remove-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "Wallpaper" -ErrorAction SilentlyContinue
