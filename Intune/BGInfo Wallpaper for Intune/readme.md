@@ -1,48 +1,25 @@
 # BGInfo Wallpaper for Intune
 
-Deploys [Sysinternals BGInfo](https://learn.microsoft.com/sysinternals/downloads/bginfo)
-as an Intune Win32 app: a corporate wallpaper with live system info (hostname, IPv4, etc.)
-overlaid on the desktop. Runs in the logged‑on user's session and refreshes at every logon.
+Corporate wallpaper with live system info (hostname, IPv4, serial) overlaid on the desktop.
 
-## Prerequisites
+## Change the background image
 
-Download and place these into the repo before packaging:
+The background is downloaded at install from the URL in `$ImageUrl` (top of
+`BGInfo\install.ps1`). To change the image, edit that URL to point at your bitmap.
 
-1. **BGInfo** – https://download.sysinternals.com/files/BGInfo.zip
-   Extract and copy `Bginfo64.exe` into the `BGInfo\` folder.
-2. **Intune Content Prep Tool** – https://github.com/microsoft/Microsoft-Win32-Content-Prep-Tool
-   Provides `IntuneWinAppUtil.exe` (used to build `install.intunewin`).
+A `BGInfo\background.bmp` bundled in the package is used only as a fallback if the
+download fails (e.g. no network during Autopilot). Then repackage and re-upload to Intune.
 
-## Repo layout
+## Do this in BGInfo before packaging (one-time)
 
-| File | Purpose |
-| --- | --- |
-| `BGInfo\Bginfo64.exe` | BGInfo executable (download separately) |
-| `BGInfo\Company.bgi` | BGInfo layout (fields + background) |
-| `BGInfo\RefreshBGInfo.ps1` | Writes IPv4 + serial number to `HKCU\Software\BGInfo`, then runs BGInfo |
-| `BGInfo\install.ps1` | Installer: copies files, sets Run key, runs in user session |
-| `BGInfo\uninstall.ps1` | Removes files, Run key, task, registry, wallpaper |
-| `install.intunewin` | Packaged app to upload to Intune |
+Open `BGInfo\Company.bgi` in `Bginfo64.exe`, then:
 
-## Configure `Company.bgi` (one‑time, BGInfo GUI)
+1. **Background** → choose **Copy existing settings** (not a solid color, or the image
+   won't show).
+2. **File → Save**.
 
-The IPv4 and serial-number fields read a **registry value** (VBScript is deprecated and
-isn't stored in the `.bgi`). `RefreshBGInfo.ps1` writes the values; BGInfo just reads them.
-
-1. Run `Bginfo64.exe`, open `Company.bgi`.
-2. (Optional) **Background** → set your corporate wallpaper bitmap.
-3. **Custom → New**: Identifier `IPv4`, *A registry value*, path
-   `HKEY_CURRENT_USER\Software\BGInfo\IPv4`. Add it to the layout.
-4. **Custom → New**: Identifier `SerialNumber`, *A registry value*, path
-   `HKEY_CURRENT_USER\Software\BGInfo\SerialNumber`. Add it to the layout.
-5. **File → Save**.
-
-Test locally: set the value, then open the config —
-
-```powershell
-& ".\BGInfo\RefreshBGInfo.ps1"   # writes HKCU\Software\BGInfo\IPv4 (needs Bginfo64.exe path adjusted for local runs)
-.\BGInfo\Bginfo64.exe .\BGInfo\Company.bgi /nolicprompt
-```
+The IPv4/serial fields already read from `HKCU\Software\BGInfo`; `RefreshBGInfo.ps1` fills
+those in and sets the background before each refresh.
 
 ## Package
 
@@ -50,22 +27,13 @@ Test locally: set the value, then open the config —
 & ".\Microsoft-Win32-Content-Prep-Tool-master\IntuneWinAppUtil.exe" -c ".\BGInfo" -s "install.ps1" -o "." -q
 ```
 
-## Deploy in Intune (Win32 app)
+Then upload the new `install.intunewin` to Intune. Repackaging locally does nothing until
+you re-upload.
+
+## Intune deploy settings
 
 - **Install command:** `powershell.exe -ExecutionPolicy Bypass -File install.ps1`
 - **Uninstall command:** `powershell.exe -ExecutionPolicy Bypass -File uninstall.ps1`
 - **Install behavior:** System
-- **Detection rule (File):** path `C:\Program Files\BGInfo`, file `RefreshBGInfo.ps1`,
-  *File or folder exists*. (Detecting this file ensures package updates actually reinstall.)
-
-Upload the new `install.intunewin` whenever you change anything — repackaging locally does
-not update Intune until you re‑upload.
-
-## Notes
-
-- **Wallpaper policy conflicts:** an enforced wallpaper (Intune PersonalizationCSP or a GPO)
-  overrides BGInfo. Either remove that policy, or set the corporate image inside
-  `Company.bgi` and don't force a separate wallpaper.
-- **Updates not applying?** The detection rule reports "installed" so the installer won't
-  re‑run. Uninstall first (or delete `C:\Program Files\BGInfo` + the `BGInfo` Run key), then
-  reinstall.
+- **Detection rule (File):** Rule type **File**, Path `C:\Program Files\BGInfo`,
+  File `RefreshBGInfo.ps1`, Detection method **File or folder exists**.
